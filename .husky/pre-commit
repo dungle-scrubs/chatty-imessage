@@ -1,0 +1,9 @@
+# Add bun to PATH for scripts
+export PATH="$HOME/.bun/bin:$PATH"
+
+# Secret detection (fast)
+gitleaks protect --staged --no-banner
+
+bun run typecheck
+bun run check
+bun run test
