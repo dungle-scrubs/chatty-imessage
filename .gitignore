@@ -35,3 +35,9 @@ bun.lock
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Claude Code
+.claude/
+CLAUDE.md
+AGENT.md
+logs/
