@@ -1,4 +1,5 @@
 import { $ } from "bun";
+import { escapeAppleScript } from "../utils/applescript";
 
 /** In-memory cache of resolved contact names */
 const nameCache = new Map<string, string | null>();
@@ -14,6 +15,10 @@ export async function resolveContactName(identifier: string): Promise<string | n
   return name;
 }
 
+/**
+ * Query Contacts.app via osascript to find a person by phone or email.
+ * Each call spawns a subprocess — use resolveContactNames for batch lookups.
+ */
 async function lookupInContacts(identifier: string): Promise<string | null> {
   // Determine if this is a phone number or email
   const isPhone = /^[\d+\-() ]+$/.test(identifier);
@@ -98,10 +103,6 @@ export async function resolveContactNames(
     results.set(id, nameCache.get(id) ?? null);
   }
   return results;
-}
-
-function escapeAppleScript(str: string): string {
-  return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
 /** Clear the name cache */

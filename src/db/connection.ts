@@ -14,6 +14,12 @@ export class ChatDbError extends Error {
   }
 }
 
+/**
+ * Get or lazily open a read-only connection to the Messages SQLite database.
+ * Throws ChatDbError with actionable messages when the database is missing or inaccessible.
+ * @returns Open Database handle (singleton — reused across calls)
+ * @throws {ChatDbError} If database file is missing or Full Disk Access is not granted
+ */
 export function getDb(): Database {
   if (!db) {
     if (!existsSync(CHAT_DB_PATH)) {
@@ -39,6 +45,7 @@ export function getDb(): Database {
   return db;
 }
 
+/** Close the database connection if open. Safe to call multiple times. */
 export function closeDb(): void {
   if (db) {
     db.close();

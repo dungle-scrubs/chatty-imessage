@@ -55,6 +55,12 @@ LEFT JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
 LEFT JOIN chat c ON cmj.chat_id = c.ROWID
 `;
 
+/**
+ * Query messages from the Messages database with optional filters.
+ * Results are ordered by date descending (newest first).
+ * @param options - Filtering and pagination options
+ * @returns Array of raw message rows with joined handle/chat data
+ */
 export function queryMessages(options: MessageQueryOptions = {}): MessageRow[] {
   const db = getDb();
   const conditions: string[] = [];
@@ -94,6 +100,11 @@ export function queryMessages(options: MessageQueryOptions = {}): MessageRow[] {
   return db.query(query).all(...params) as MessageRow[];
 }
 
+/**
+ * Get all attachments for a given message.
+ * @param messageId - Message ROWID from the message table
+ * @returns Array of attachment metadata rows
+ */
 export function getAttachments(messageId: number): AttachmentRow[] {
   const db = getDb();
   const query = `
@@ -112,6 +123,7 @@ export function getAttachments(messageId: number): AttachmentRow[] {
   return db.query(query).all(messageId) as AttachmentRow[];
 }
 
+/** Get all distinct contact handles (phone numbers and emails) from message history */
 export function getAllHandles(): HandleRow[] {
   const db = getDb();
   const query = `
@@ -126,6 +138,11 @@ export function getAllHandles(): HandleRow[] {
   return db.query(query).all() as HandleRow[];
 }
 
+/**
+ * Look up a single message by its unique guid.
+ * @param guid - Message GUID (e.g., from reply_to_guid or associated_message_guid)
+ * @returns Message row or null if not found
+ */
 export function getMessageByGuid(guid: string): MessageRow | null {
   const db = getDb();
   const query = `${BASE_MESSAGE_QUERY} WHERE m.guid = ?`;

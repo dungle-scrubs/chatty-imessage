@@ -1,4 +1,8 @@
-# chatty-imessage
+# chat-imessage
+
+[![CI](https://github.com/dungle-scrubs/chat-imessage/actions/workflows/ci.yml/badge.svg)](https://github.com/dungle-scrubs/chat-imessage/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/chat-imessage)](https://www.npmjs.com/package/chat-imessage)
 
 CLI tool for reading and sending iMessages on macOS. Reads message history directly from the Messages database and sends via AppleScript.
 
@@ -14,38 +18,43 @@ CLI tool for reading and sending iMessages on macOS. Reads message history direc
 ## Requirements
 
 - macOS (tested on macOS 14+)
-- [Bun](https://bun.sh) runtime (for building only - not needed to run)
+- [Bun](https://bun.sh) runtime
 - Full Disk Access permission (for reading `~/Library/Messages/chat.db`)
 - Automation permission for Messages.app (for sending)
 
 ## Installation
 
+### npm (recommended)
+
+```bash
+npm install -g chat-imessage
+```
+
+> Requires [Bun](https://bun.sh) runtime — the tool uses `bun:sqlite` for database access.
+
+### From source
+
 ```bash
 # Install Bun if not already installed
 curl -fsSL https://bun.sh/install | bash
 
-# Clone and install dependencies
-git clone https://github.com/yourusername/chatty-imessage.git
-cd chatty-imessage
+# Clone and build
+git clone https://github.com/dungle-scrubs/chat-imessage.git
+cd chat-imessage
 bun install
 
-# Build and install to ~/.local/bin
+# Option A: Build standalone binary to ~/.local/bin
 bun run build
 ./scripts/install.sh
+
+# Option B: Run directly without building
+bun run src/index.ts list --last-week
 ```
 
-Make sure `~/.local/bin` is in your PATH. Add to `~/.zshrc` if not:
+If using the install script, ensure `~/.local/bin` is in your PATH:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
-```
-
-### Development mode
-
-Run directly without building:
-
-```bash
-bun run src/index.ts list --last-week
 ```
 
 ## Usage
@@ -54,67 +63,67 @@ bun run src/index.ts list --last-week
 
 ```bash
 # Last 20 messages (default)
-chatty list
+chat list
 
 # Last 100 messages from the past week
-chatty list --last-week -n 100
+chat list --last-week -n 100
 
 # Messages from a specific contact
-chatty list --from "John Doe"
-chatty list --from "+1234567890"
+chat list --from "John Doe"
+chat list --from "+1234567890"
 
 # Natural language date filters
-chatty list --last "15 days"
-chatty list --this-month
+chat list --last "15 days"
+chat list --this-month
 
 # Filter options
-chatty list --unread
-chatty list --with-attachments
+chat list --unread
+chat list --with-attachments
 
 # Output as JSON
-chatty list --json
+chat list --json
 
 # Verbose mode (delivery times, effects)
-chatty list -v
+chat list -v
 ```
 
 ### Send messages
 
 ```bash
 # By phone number
-chatty send "+1234567890" "Hello!"
+chat send "+1234567890" "Hello!"
 
 # By contact name (resolves via Contacts.app)
-chatty send "John Doe" "Hey there"
+chat send "John Doe" "Hey there"
 
 # Force SMS instead of iMessage
-chatty send "+1234567890" "SMS message" --service SMS
+chat send "+1234567890" "SMS message" --service SMS
 ```
 
 ### View contacts
 
 ```bash
 # List all contacts with name resolution
-chatty contacts
+chat contacts
 
 # Fast mode (no name lookup)
-chatty contacts --no-resolve
+chat contacts --no-resolve
 
 # JSON output
-chatty contacts --json
+chat contacts --json
 ```
 
 ### Open attachments
 
 ```bash
 # List attachments for a message (ID shown in list output)
-chatty open 299025 --list
+chat open 299025 --list
 
 # Open first attachment
-chatty open 299025
+chat open 299025
 
 # Open specific attachment
-chatty open 299025 -a 2
+chat open 299025 -a 2
 ```
 
 ## Permissions Setup
@@ -124,21 +133,13 @@ chatty open 299025 -a 2
 
 ## Known Limitations
 
-- **macOS only** - Uses macOS-specific paths and AppleScript
-- **Read-only database** - Cannot modify message history, only read
-- **Contact resolution latency** - Each contact lookup spawns an osascript process
-- **No group chat sending** - Send command works with individual recipients only
+- **macOS only** — uses macOS-specific paths and AppleScript
+- **Requires Bun** — uses `bun:sqlite` (not Node.js compatible)
+- **Read-only database** — cannot modify message history, only read
+- **Contact resolution latency** — each contact lookup spawns an osascript process
+- **No group chat sending** — send command works with individual recipients only
 
 ## Development
-
-### Setup
-
-```bash
-# Install gitleaks for pre-commit secret scanning
-brew install gitleaks
-```
-
-### Commands
 
 ```bash
 bun test          # Run tests
@@ -151,11 +152,8 @@ Pre-commit hooks run automatically: secret scan, typecheck, lint, and tests.
 
 ## Contributing
 
-1. Fork the repository
-2. Install gitleaks (`brew install gitleaks`)
-3. Create a feature branch
-4. Run `bun run check` before committing
-5. Submit a pull request
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, commit conventions,
+and code style guidelines.
 
 ## License
 

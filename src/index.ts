@@ -6,7 +6,10 @@ import { openCommand } from "./commands/open";
 import { sendCommand } from "./commands/send";
 import { ChatDbError, closeDb } from "./db/connection";
 
-program.name("chatty").description("CLI for reading and sending iMessages").version("0.1.0");
+// x-release-please-version
+const VERSION = "0.1.0";
+
+program.name("chat").description("CLI for reading and sending iMessages").version(VERSION);
 
 program.addCommand(listCommand);
 program.addCommand(sendCommand);

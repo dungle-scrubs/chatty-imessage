@@ -2,7 +2,7 @@
 set -e
 
 INSTALL_DIR="$HOME/.local/bin"
-BINARY="dist/chatty"
+BINARY="dist/chat"
 
 if [ ! -f "$BINARY" ]; then
   echo "Error: Binary not found at $BINARY"
@@ -11,10 +11,10 @@ if [ ! -f "$BINARY" ]; then
 fi
 
 mkdir -p "$INSTALL_DIR"
-cp "$BINARY" "$INSTALL_DIR/chatty"
-chmod +x "$INSTALL_DIR/chatty"
+cp "$BINARY" "$INSTALL_DIR/chat"
+chmod +x "$INSTALL_DIR/chat"
 
-echo "Installed chatty to $INSTALL_DIR/chatty"
+echo "Installed chat to $INSTALL_DIR/chat"
 
 # Check if ~/.local/bin is in PATH
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then

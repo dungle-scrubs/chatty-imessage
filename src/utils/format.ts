@@ -161,7 +161,7 @@ export function formatMessagesJson(messages: FormattedMessage[]): string {
   );
 }
 
-/** Format contacts list */
+/** Format a single contact for terminal display with name, handle, and service badge */
 export function formatContact(handle: string, service: string, name: string | null): string {
   const displayName = name ? chalk.bold(name) : chalk.dim("(no name)");
   const badge = serviceBadge(service);

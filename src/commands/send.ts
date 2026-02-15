@@ -2,10 +2,7 @@ import { $ } from "bun";
 import chalk from "chalk";
 import { Command } from "commander";
 import { resolveIdentifierFromName } from "../contacts/resolver";
-
-function escapeAppleScript(str: string): string {
-  return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-}
+import { escapeAppleScript } from "../utils/applescript";
 
 export const sendCommand = new Command("send")
   .description("Send a message via iMessage/SMS")
